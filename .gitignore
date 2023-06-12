@@ -8,9 +8,8 @@
 *.dll
 *.so
 *.dylib
-note.txt
+*.txt
 .idea
-.env
 
 # Test binary, built with `go test -c`
 *.test
