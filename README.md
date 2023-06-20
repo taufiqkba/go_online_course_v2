@@ -10,3 +10,9 @@
 - Implement error response
 - Register user service using OAuth2
 - Login user service
+
+### Day 3
+- Setup Dependency Injection using Wire
+- Clean up code with Wire
+- Setup Sendgrid for email verification
+- Implement forgot password service
