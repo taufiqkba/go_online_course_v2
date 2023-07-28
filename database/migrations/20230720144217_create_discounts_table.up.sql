@@ -1,0 +1,23 @@
+create table discounts(
+    id INT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    code VARCHAR(255) NOT NULL,
+    quantity INT NOT NULL,
+    remaining_quantity INT NOT NULL,
+    type VARCHAR(255) NOT NULL,
+    value INT NOT NULL,
+    start_date TIMESTAMP NULL,
+    end_date TIMESTAMP NULL,
+    created_by INT NULL,
+    updated_by INT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NULL,
+    deleted_at TIMESTAMP NULL,
+    PRIMARY KEY(id),
+    UNIQUE KEY discounts_code_unique(code),
+    INDEX idx_discounts_code(code),
+    INDEX idx_discounts_created_by(created_by),
+    INDEX idx_discounts_updated_by(updated_by),
+    CONSTRAINT FK_discounts_created_by FOREIGN KEY (created_by) REFERENCES admins(id) ON DELETE SET NULL,
+    CONSTRAINT FK_discounts_updated_by FOREIGN KEY (updated_by) REFERENCES admins(id) ON DELETE SET NULL
+) ENGINE = INNODB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8;

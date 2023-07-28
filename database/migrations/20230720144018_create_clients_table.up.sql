@@ -17,5 +17,5 @@ create table oauth_clients (
     INDEX idx_oauth_clients_created_by (created_by),
     INDEX idx_oauth_clients_updated_by (updated_by),
     CONSTRAINT FK_oauth_clients_created_by FOREIGN KEY (created_by) REFERENCES admins(id) ON DELETE SET NULL,
-    CONSTRAINT FK_oauth_clients_updated_by FOREIGN KEY (updated_by) REFERENCES admins(id) ON DELETE SET NULL,
+    CONSTRAINT FK_oauth_clients_updated_by FOREIGN KEY (updated_by) REFERENCES admins(id) ON DELETE SET NULL
 ) ENGINE = INNODB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8;

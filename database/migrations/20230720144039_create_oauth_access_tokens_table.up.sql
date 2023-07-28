@@ -16,5 +16,5 @@ create table oauth_access_token (
     INDEX idx_oauth_access_tokens_oauth_client_id(oauth_client_id),
     INDEX idx_oauth_access_tokens_oauth_created_by(created_by),
     INDEX idx_oauth_access_tokens_oauth_updated_by(updated_by),
-    CONSTRAINT FK_oauth_access_tokens_oauth_client_id FOREIGN KEY (oauth_client_id) REFERENCES oauth_clients(id) ON DELETE SET NULL,
-)
+    CONSTRAINT FK_oauth_access_tokens_oauth_client_id FOREIGN KEY (oauth_client_id) REFERENCES oauth_clients(id) ON DELETE SET NULL
+) ENGINE = INNODB AUTO_INCREMENT = 1 DEFAULT CHARSET = utf8;
