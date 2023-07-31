@@ -1,4 +1,4 @@
-create table oauth_access_token (
+create table oauth_access_tokens (
     id INT NOT NULL AUTO_INCREMENT,
     oauth_client_id INT NULL,
     user_id INT NOT NULL,

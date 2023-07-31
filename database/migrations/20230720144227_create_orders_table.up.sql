@@ -1,7 +1,7 @@
 create table orders (
     id INT NOT NULL AUTO_INCREMENT,
-    user_id INT NOT NULL,
-    discount_id INT NOT NULL,
+    user_id INT NULL,
+    discount_id INT NULL,
     checkout_link VARCHAR(255) NULL,
     external_id VARCHAR(255) NULL,
     price INT NOT NULL,

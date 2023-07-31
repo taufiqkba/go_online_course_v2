@@ -1,7 +1,7 @@
 create table order_details(
     id INT NOT NULL AUTO_INCREMENT,
-    order_id INT NOT NULL,
-    product_id INT NOT NULL,
+    order_id INT NULL,
+    product_id INT NULL,
     price INT NOT NULL,
     created_by INT NULL,
     updated_by INT NULL,
