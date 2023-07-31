@@ -1,5 +1,7 @@
 package main
 
+import "go_online_course_v2/pkg/db/mysql"
+
 func main() {
-	//TODO Connection to database here
+	mysql.DB()
 }
