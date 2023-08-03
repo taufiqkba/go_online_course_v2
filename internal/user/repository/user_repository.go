@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"errors"
 	"go_online_course_v2/internal/user/entity"
 	"go_online_course_v2/pkg/response"
 	"gorm.io/gorm"
@@ -32,8 +33,15 @@ func (repository *userRepository) FindOneByID(id int) (*entity.User, *response.E
 }
 
 func (repository *userRepository) FindByEmail(email string) (*entity.User, *response.Errors) {
-	//TODO implement me
-	panic("implement me")
+	var user entity.User
+
+	if err := repository.db.Where("email = ?", email).First(&user).Error; err != nil {
+		return nil, &response.Errors{
+			Code: 500,
+			Err:  errors.New("register error"),
+		}
+	}
+	return &user, nil
 }
 
 func (repository *userRepository) Create(entity entity.User) (*entity.User, *response.Errors) {
@@ -66,6 +74,6 @@ func (repository *userRepository) TotalCountUser() int64 {
 	panic("implement me")
 }
 
-func newUserRepository(db *gorm.DB) UserRepository {
+func NewUserRepository(db *gorm.DB) UserRepository {
 	return &userRepository{db: db}
 }

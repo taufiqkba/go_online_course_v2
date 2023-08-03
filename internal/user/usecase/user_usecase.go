@@ -102,6 +102,6 @@ func (useCase *userUseCase) TotalCountUser() int64 {
 	panic("implement me")
 }
 
-func newUserUseCase(repository repository.UserRepository) UserUseCase {
+func NewUserUseCase(repository repository.UserRepository) UserUseCase {
 	return &userUseCase{repository: repository}
 }
