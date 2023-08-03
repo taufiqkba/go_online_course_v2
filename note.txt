@@ -8,4 +8,7 @@
 -- migrate -database "mysql://root:root@tcp(localhost:3306)/go_online_course_v2" -path database/migrations force 20230429132048
 
 - Run Migration: migrate create -ext sql -dir database/migrations create_admins_table
-- 
+
+Session 2 - Oauth Register
+- About error code on 1:16:00
+- login with Oauth2 using method Resource owner password
