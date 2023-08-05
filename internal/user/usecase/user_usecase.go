@@ -33,8 +33,7 @@ func (useCase *userUseCase) FindAll(offset int, limit int) []entity.User {
 
 // FindByEmail implements UserUseCase
 func (useCase *userUseCase) FindByEmail(email string) (*entity.User, *response.Errors) {
-	//	TODO IMPLEMENT Me
-	panic("implement me")
+	return useCase.repository.FindByEmail(email)
 }
 
 func (useCase *userUseCase) FindOneByID(id int) (*entity.User, *response.Errors) {

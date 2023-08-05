@@ -1,7 +1,6 @@
 package repository
 
 import (
-	"errors"
 	"go_online_course_v2/internal/user/entity"
 	"go_online_course_v2/pkg/response"
 	"gorm.io/gorm"
@@ -38,7 +37,7 @@ func (repository *userRepository) FindByEmail(email string) (*entity.User, *resp
 	if err := repository.db.Where("email = ?", email).First(&user).Error; err != nil {
 		return nil, &response.Errors{
 			Code: 500,
-			Err:  errors.New("register error"),
+			Err:  err,
 		}
 	}
 	return &user, nil
