@@ -88,7 +88,9 @@ func (useCase *oauthUseCase) Login(dtoLoginRequestBody dto.LoginRequest) (*dto.L
 		Scope:         "*",
 		ExpiredAt:     &expirationTime,
 	}
+
 	oauthAccessToken, err := useCase.oauthAccessTokenRepository.Create(dataOauthAccessToken)
+
 	if err != nil {
 		return nil, err
 	}

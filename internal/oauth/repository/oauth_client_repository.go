@@ -18,7 +18,11 @@ type oauthClientRepository struct {
 func (repository *oauthClientRepository) FindByClientIDAndClientSecret(clientID string, clientSecret string) (*entity.OauthClient, *response.Errors) {
 	var oauthClient entity.OauthClient
 
-	if err := repository.db.Where("client_id = ?", clientID).Where("client_secret = ?", clientSecret).Error; err != nil {
+	if err := repository.db.
+		Where("client_id = ?", clientID).
+		Where("client_secret = ?", clientSecret).
+		First(&oauthClient).
+		Error; err != nil {
 		return nil, &response.Errors{
 			Code: 500,
 			Err:  err,
