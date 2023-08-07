@@ -11,6 +11,7 @@ import (
 	usecase2 "go_online_course_v2/internal/register/usecase"
 	"go_online_course_v2/internal/user/repository"
 	"go_online_course_v2/internal/user/usecase"
+	"go_online_course_v2/pkg/mail/sendgrid"
 	"gorm.io/gorm"
 )
 
@@ -19,7 +20,8 @@ import (
 func InitializedService(db *gorm.DB) *http.RegisterHandler {
 	userRepository := repository.NewUserRepository(db)
 	userUseCase := usecase.NewUserUseCase(userRepository)
-	registerUseCase := usecase2.NewRegisterUseCase(userUseCase)
+	mail := sendgrid.NewMailUseCase()
+	registerUseCase := usecase2.NewRegisterUseCase(userUseCase, mail)
 	registerHandler := http.NewRegisterHandler(registerUseCase)
 	return registerHandler
 }

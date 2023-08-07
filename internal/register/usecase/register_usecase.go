@@ -1,8 +1,10 @@
 package usecase
 
 import (
+	dto2 "go_online_course_v2/internal/register/dto"
 	"go_online_course_v2/internal/user/dto"
 	"go_online_course_v2/internal/user/usecase"
+	"go_online_course_v2/pkg/mail/sendgrid"
 	"go_online_course_v2/pkg/response"
 )
 
@@ -12,19 +14,27 @@ type RegisterUseCase interface {
 
 type registerUseCase struct {
 	userUseCase usecase.UserUseCase
+	mail        sendgrid.Mail
 }
 
 func (useCase *registerUseCase) Register(dto dto.UserRequestBody) *response.Errors {
-	_, err := useCase.userUseCase.Create(dto)
-
+	user, err := useCase.userUseCase.Create(dto)
 	if err != nil {
 		return err
 	}
 
 	//	TODO send email verified using SendGrid
+	data := dto2.EmailVerification{
+		Subject:          "Verification Account",
+		Email:            dto.Email,
+		VerificationCode: user.CodeVerified,
+	}
+
+	//use goroutine
+	go useCase.mail.SendVerification(dto.Email, data)
 	return nil
 }
 
-func NewRegisterUseCase(userUseCase usecase.UserUseCase) RegisterUseCase {
-	return &registerUseCase{userUseCase: userUseCase}
+func NewRegisterUseCase(userUseCase usecase.UserUseCase, mail sendgrid.Mail) RegisterUseCase {
+	return &registerUseCase{userUseCase: userUseCase, mail: mail}
 }

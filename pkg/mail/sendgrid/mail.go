@@ -9,10 +9,11 @@ import (
 	"go_online_course_v2/internal/register/dto"
 	"html/template"
 	"os"
+	"path/filepath"
 )
 
 type Mail interface {
-	SendVerification(toEmail string, verification dto.EmailVerification)
+	SendVerification(toEmail string, data dto.EmailVerification)
 }
 
 type mailUseCase struct {
@@ -35,8 +36,15 @@ func (usecase *mailUseCase) sendMail(toEmail string, result string, subject stri
 	}
 }
 
-func (usecase *mailUseCase) SendVerification(toEmail string, verification dto.EmailVerification) {
-
+func (usecase *mailUseCase) SendVerification(toEmail string, data dto.EmailVerification) {
+	cwd, _ := os.Getwd()
+	templateFile := filepath.Join(cwd, "/templates/email/verification_email.gohtml")
+	result, err := ParseTemplate(templateFile, data)
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		usecase.sendMail(toEmail, result, data.Subject)
+	}
 }
 
 func ParseTemplate(templateName string, data interface{}) (string, error) {
