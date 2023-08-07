@@ -19,7 +19,7 @@ type Mail interface {
 type mailUseCase struct {
 }
 
-func (usecase *mailUseCase) sendMail(toEmail string, result string, subject string) {
+func (useCase *mailUseCase) sendMail(toEmail string, result string, subject string) {
 	from := mail.NewEmail(os.Getenv("MAIL_SENDER_NAME"), os.Getenv("MAIL_SENDER_NAME"))
 	to := mail.NewEmail(toEmail, toEmail)
 
@@ -36,14 +36,14 @@ func (usecase *mailUseCase) sendMail(toEmail string, result string, subject stri
 	}
 }
 
-func (usecase *mailUseCase) SendVerification(toEmail string, data dto.EmailVerification) {
+func (useCase *mailUseCase) SendVerification(toEmail string, data dto.EmailVerification) {
 	cwd, _ := os.Getwd()
 	templateFile := filepath.Join(cwd, "/templates/email/verification_email.gohtml")
 	result, err := ParseTemplate(templateFile, data)
 	if err != nil {
 		fmt.Println(err)
 	} else {
-		usecase.sendMail(toEmail, result, data.Subject)
+		useCase.sendMail(toEmail, result, data.Subject)
 	}
 }
 
