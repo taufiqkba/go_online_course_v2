@@ -68,7 +68,7 @@ func (useCase *userUseCase) Create(dto dto.UserRequestBody) (*entity.User, *resp
 		Name:         dto.Name,
 		Email:        dto.Email,
 		Password:     string(hashedPassword),
-		CodeVerified: utils.RandString(32),
+		CodeVerified: utils.RandNumber(8),
 	}
 
 	dataUser, err := useCase.repository.Create(user)
