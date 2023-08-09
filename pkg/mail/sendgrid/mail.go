@@ -38,7 +38,7 @@ func (useCase *mailUseCase) sendMail(toEmail string, result string, subject stri
 
 func (useCase *mailUseCase) SendVerification(toEmail string, data dto.EmailVerification) {
 	cwd, _ := os.Getwd()
-	templateFile := filepath.Join(cwd, "/templates/email/verification_email.gohtml")
+	templateFile := filepath.Join(cwd, "/templates/email/verification_email.html")
 	result, err := ParseTemplate(templateFile, data)
 	if err != nil {
 		fmt.Println(err)
