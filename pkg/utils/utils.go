@@ -11,3 +11,13 @@ func RandString(length int) string {
 	}
 	return string(b)
 }
+
+func RandNumber(length int) string {
+	var letterRune = []rune("1234567890")
+
+	b := make([]rune, length)
+	for i := range b {
+		b[i] = letterRune[rand.Intn(len(letterRune))]
+	}
+	return string(b)
+}
