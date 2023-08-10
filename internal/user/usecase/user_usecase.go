@@ -17,7 +17,7 @@ type UserUseCase interface {
 	FindOneByID(id int) (*entity.User, *response.Errors)
 	Create(dto dto.UserRequestBody) (*entity.User, *response.Errors)
 	FindOneByCodeVerified(codeVerified string) (*entity.User, *response.Errors)
-	Update(id int, dto dto.UserRequestBody) (*entity.User, *response.Errors)
+	Update(id int, dto dto.UserUpdateRequestBody) (*entity.User, *response.Errors)
 	Delete(id int) *response.Errors
 	TotalCountUser() int64
 }
@@ -37,8 +37,7 @@ func (useCase *userUseCase) FindByEmail(email string) (*entity.User, *response.E
 }
 
 func (useCase *userUseCase) FindOneByID(id int) (*entity.User, *response.Errors) {
-	//TODO implement me
-	panic("implement me")
+	return useCase.repository.FindOneByID(id)
 }
 
 // Create implements UserUseCase
@@ -68,7 +67,7 @@ func (useCase *userUseCase) Create(dto dto.UserRequestBody) (*entity.User, *resp
 		Name:         dto.Name,
 		Email:        dto.Email,
 		Password:     string(hashedPassword),
-		CodeVerified: utils.RandNumber(8),
+		CodeVerified: utils.RandNumber(12),
 	}
 
 	dataUser, err := useCase.repository.Create(user)
@@ -86,9 +85,32 @@ func (useCase *userUseCase) FindOneByCodeVerified(codeVerified string) (*entity.
 	panic("implement me")
 }
 
-func (useCase *userUseCase) Update(id int, dto dto.UserRequestBody) (*entity.User, *response.Errors) {
-	//TODO implement me
-	panic("implement me")
+func (useCase *userUseCase) Update(id int, dto dto.UserUpdateRequestBody) (*entity.User, *response.Errors) {
+	//	find user by id
+	user, err := useCase.repository.FindOneByID(id)
+
+	if err != nil {
+		return nil, err
+	}
+
+	//	check
+	if dto.Password != nil {
+		hashedPassword, err := bcrypt.GenerateFromPassword([]byte(*dto.Password), bcrypt.DefaultCost)
+		if err != nil {
+			return nil, &response.Errors{
+				Code: 500,
+				Err:  err,
+			}
+		}
+		user.Password = string(hashedPassword)
+	}
+
+	updateUser, err := useCase.repository.Update(*user)
+	if err != nil {
+		return nil, err
+	}
+
+	return updateUser, nil
 }
 
 func (useCase *userUseCase) Delete(id int) *response.Errors {

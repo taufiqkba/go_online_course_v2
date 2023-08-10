@@ -49,6 +49,6 @@ func (repository *forgotPasswordRepository) Update(entity entity.ForgotPassword)
 	return &entity, nil
 }
 
-func newForgotPasswordRepository(db *gorm.DB) ForgotPasswordRepository {
+func NewForgotPasswordRepository(db *gorm.DB) ForgotPasswordRepository {
 	return &forgotPasswordRepository{db: db}
 }

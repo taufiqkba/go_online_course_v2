@@ -12,7 +12,7 @@ type UserRepository interface {
 	FindByEmail(email string) (*entity.User, *response.Errors)
 	Create(entity entity.User) (*entity.User, *response.Errors)
 	FindOneByCodeVerified(codeVerified string) (*entity.User, *response.Errors)
-	Update(id int, entity entity.User) (*entity.User, *response.Errors)
+	Update(entity entity.User) (*entity.User, *response.Errors)
 	Delete(id int, entity entity.User) (*entity.User, *response.Errors)
 	TotalCountUser() int64
 }
@@ -27,8 +27,15 @@ func (repository *userRepository) FindAll(offset int, limit int) []entity.User {
 }
 
 func (repository *userRepository) FindOneByID(id int) (*entity.User, *response.Errors) {
-	//TODO implement me
-	panic("implement me")
+	var user entity.User
+	if err := repository.db.First(&user, id).Error; err != nil {
+		return nil, &response.Errors{
+			Code: 500,
+			Err:  nil,
+		}
+	}
+
+	return &user, nil
 }
 
 func (repository *userRepository) FindByEmail(email string) (*entity.User, *response.Errors) {
@@ -58,9 +65,14 @@ func (repository *userRepository) FindOneByCodeVerified(codeVerified string) (*e
 	panic("implement me")
 }
 
-func (repository *userRepository) Update(id int, entity entity.User) (*entity.User, *response.Errors) {
-	//TODO implement me
-	panic("implement me")
+func (repository *userRepository) Update(entity entity.User) (*entity.User, *response.Errors) {
+	if err := repository.db.Save(&entity).Error; err != nil {
+		return nil, &response.Errors{
+			Code: 500,
+			Err:  err,
+		}
+	}
+	return &entity, nil
 }
 
 func (repository *userRepository) Delete(id int, entity entity.User) (*entity.User, *response.Errors) {
