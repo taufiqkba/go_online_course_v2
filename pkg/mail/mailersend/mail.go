@@ -23,17 +23,13 @@ func (useCase *mailUseCase) SendVerificationMailer(toEmail string, data dto.Emai
 	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
 	defer cancel()
 
-	from := mailersend.From{
-		Name:  "Yteam Online Course",
-		Email: "verif@yteamdigital.my.id",
-	}
-
 	recipients := []mailersend.Recipient{
 		{
 			Email: toEmail,
 		},
 	}
 
+	accountName := os.Getenv("MAILERSEND_NAME")
 	variables := []mailersend.Variables{
 		{
 			Email: toEmail,
@@ -44,7 +40,7 @@ func (useCase *mailUseCase) SendVerificationMailer(toEmail string, data dto.Emai
 				},
 				{
 					Var:   "account.name",
-					Value: "Yteam Online Course",
+					Value: accountName,
 				},
 				{
 					Var:   "VerificationCode",
@@ -56,14 +52,12 @@ func (useCase *mailUseCase) SendVerificationMailer(toEmail string, data dto.Emai
 
 	message := ms.Email.NewMessage()
 
-	message.SetFrom(from)
 	message.SetRecipients(recipients)
 	message.SetSubject(data.Subject)
-	message.SetTemplateID("neqvygmr5zdl0p7w")
+	message.SetTemplateID(os.Getenv("MAILERSEND_TEMPLATE_ID"))
 	message.SetSubstitutions(variables)
 
 	res, _ := ms.Email.Send(ctx, message)
-
 	fmt.Printf(res.Header.Get("X-Message-Id"))
 }
 
