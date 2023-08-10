@@ -2,7 +2,6 @@ package mailersend
 
 import (
 	"context"
-	"fmt"
 	"github.com/mailersend/mailersend-go"
 	"go_online_course_v2/internal/register/dto"
 	"os"
@@ -57,8 +56,7 @@ func (useCase *mailUseCase) SendVerificationMailer(toEmail string, data dto.Emai
 	message.SetTemplateID(os.Getenv("MAILERSEND_TEMPLATE_ID"))
 	message.SetSubstitutions(variables)
 
-	res, _ := ms.Email.Send(ctx, message)
-	fmt.Printf(res.Header.Get("X-Message-Id"))
+	_, _ = ms.Email.Send(ctx, message)
 }
 
 func NewMailUseCase() Mail {
