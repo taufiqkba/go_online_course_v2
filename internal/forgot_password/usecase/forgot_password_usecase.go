@@ -40,7 +40,7 @@ func (useCase *forgotPasswordUseCase) Create(dtoForgotPassword dto.ForgotPasswor
 
 	dateTime := time.Now().Add(24 * 1 * time.Hour)
 	forgotPassword := entity.ForgotPassword{
-		UserId:    &user.ID,
+		UserID:    &user.ID,
 		Valid:     true,
 		Code:      utils.RandNumber(8),
 		ExpiredAt: &dateTime,
@@ -50,7 +50,7 @@ func (useCase *forgotPasswordUseCase) Create(dtoForgotPassword dto.ForgotPasswor
 
 	//	send email forgot password verification code
 	dataEmailForgotPassword := dto.ForgotPasswordEmailRequestBody{
-		Subject: "Verification Code Forgot Password",
+		Subject: "Code Forgot Password",
 		Name:    user.Name,
 		Email:   user.Email,
 		Code:    forgotPassword.Code,
@@ -74,7 +74,7 @@ func (useCase *forgotPasswordUseCase) Update(dto dto.ForgotPasswordUpdateRequest
 	}
 
 	//	search user
-	user, err := useCase.userUseCase.FindOneByID(int(*code.UserId))
+	user, err := useCase.userUseCase.FindOneByID(int(*code.UserID))
 	if err != nil {
 		return nil, err
 	}

@@ -16,6 +16,7 @@ type forgotPasswordRepository struct {
 	db *gorm.DB
 }
 
+// Create implements ForgotPasswordRepository
 func (repository *forgotPasswordRepository) Create(entity entity.ForgotPassword) (*entity.ForgotPassword, *response.Errors) {
 	if err := repository.db.Create(&entity).Error; err != nil {
 		return nil, &response.Errors{
@@ -26,6 +27,7 @@ func (repository *forgotPasswordRepository) Create(entity entity.ForgotPassword)
 	return &entity, nil
 }
 
+// FindByCode implements ForgotPasswordRepository
 func (repository *forgotPasswordRepository) FindByCode(code string) (*entity.ForgotPassword, *response.Errors) {
 	var forgotPassword entity.ForgotPassword
 
@@ -43,7 +45,7 @@ func (repository *forgotPasswordRepository) Update(entity entity.ForgotPassword)
 	if err := repository.db.Save(&entity).Error; err != nil {
 		return nil, &response.Errors{
 			Code: 500,
-			Err:  nil,
+			Err:  err,
 		}
 	}
 	return &entity, nil

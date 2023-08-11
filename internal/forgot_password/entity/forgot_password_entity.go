@@ -1,15 +1,15 @@
 package entity
 
 import (
+	"go_online_course_v2/internal/user/entity"
 	"gorm.io/gorm"
-	"os/user"
 	"time"
 )
 
 type ForgotPassword struct {
 	ID        int64          `json:"id"`
-	User      *user.User     `json:"user" gorm:"foreignKey:UserID;references:ID"`
-	UserId    *int64         `json:"user_id"`
+	User      *entity.User   `json:"user" gorm:"foreignKey:UserID;references:ID"`
+	UserID    *int64         `json:"user_id"`
 	Valid     bool           `json:"valid"`
 	Code      string         `json:"code"`
 	ExpiredAt *time.Time     `json:"expired_at"`
