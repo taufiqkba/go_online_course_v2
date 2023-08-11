@@ -29,7 +29,7 @@ func Paginate(offset int, limit int) func(db *gorm.DB) *gorm.DB {
 	return func(db *gorm.DB) *gorm.DB {
 		page := offset
 
-		//	if page value <= 0 default page 1
+		//	if page value <= 0  set default page to 1
 		if page <= 0 {
 			page = 1
 		}
