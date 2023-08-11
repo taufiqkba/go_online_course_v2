@@ -6,7 +6,7 @@ This project is a service for selling courses online by implementing a Domain Dr
 
 ## Database Design
 
-![Database](docs\scheme_database.jpg)
+![Database](docs/scheme_database.jpg)
 
 ## Packages Used
 
@@ -19,6 +19,7 @@ Here are list of libraries being used in this project
 - [Wire](https://github.com/google/wire) for Dependency Injection
 - [Mailersend](https://github.com/mailersend/mailersend-go) Email Services
 - [JWT](https://github.com/golang-jwt/jwt) most popular for hashing
+- [Testify](https://github.com/stretchr/testify) for testing
 
 ## Progression
 
