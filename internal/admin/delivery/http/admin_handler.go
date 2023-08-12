@@ -17,6 +17,15 @@ func NewAdminHandler(useCase usecase.AdminUseCase) *AdminHandler {
 	return &AdminHandler{useCase: useCase}
 }
 
+func (handler *AdminHandler) Route(r *gin.RouterGroup) {
+	adminRouter := r.Group("/api/v1")
+	adminRouter.GET("/admin", handler.FindAll)
+	adminRouter.GET("/admin/:id", handler.FindByID)
+	adminRouter.POST("/admin", handler.Create)
+	adminRouter.PATCH("/admin", handler.Update)
+	adminRouter.DELETE("/admin/:id", handler.Delete)
+}
+
 func (handler *AdminHandler) Create(ctx *gin.Context) {
 	var input dto.AdminRequestBody
 
@@ -85,4 +94,26 @@ func (handler *AdminHandler) Update(ctx *gin.Context) {
 		data,
 	))
 
+}
+
+func (handler *AdminHandler) Delete(ctx *gin.Context) {
+	id, _ := strconv.Atoi(ctx.Param("id"))
+
+	err := handler.useCase.Delete(id)
+
+	if err != nil {
+		ctx.JSON(int(err.Code), response.Response(
+			int(err.Code),
+			http.StatusText(int(err.Code)),
+			err.Err.Error(),
+		))
+		ctx.Abort()
+		return
+	}
+
+	ctx.JSON(http.StatusOK, response.Response(
+		http.StatusOK,
+		http.StatusText(http.StatusOK),
+		"OK",
+	))
 }
