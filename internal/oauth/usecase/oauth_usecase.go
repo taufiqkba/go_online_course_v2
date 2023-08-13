@@ -17,6 +17,7 @@ import (
 
 type OauthUseCase interface {
 	Login(dtoLoginRequestBody dto.LoginRequest) (*dto.LoginResponse, *response.Errors)
+	Refresh(dtoRefreshToken dto.RefreshTokenRequestBody) (*dto.LoginResponse, *response.Errors)
 }
 
 type oauthUseCase struct {
@@ -25,6 +26,115 @@ type oauthUseCase struct {
 	oauthRefreshTokenRepository repository.OauthRefreshTokenRepository
 	userUseCase                 usecase.UserUseCase
 	adminUseCase                usecase2.AdminUseCase
+}
+
+func (useCase *oauthUseCase) Refresh(dtoRefreshToken dto.RefreshTokenRequestBody) (*dto.LoginResponse, *response.Errors) {
+	//	check oauth refresh token based from refresh token data
+	oauthRefreshToken, err := useCase.oauthRefreshTokenRepository.FindOneByToken(dtoRefreshToken.RefreshToken)
+	if err != nil {
+		return nil, err
+	}
+
+	if oauthRefreshToken.ExpiredAt.Before(time.Now()) {
+		return nil, &response.Errors{
+			Code: 400,
+			Err:  errors.New("oauth refresh token has expired"),
+		}
+	}
+
+	var user dto.UserResponse
+
+	expirationTime := time.Now().Add(24 * 365 * time.Hour)
+
+	if *oauthRefreshToken.OauthAccessToken.OauthClientID == 2 {
+		admin, _ := useCase.adminUseCase.FindByID(int(oauthRefreshToken.UserID))
+
+		user.ID = admin.ID
+		user.Name = admin.Name
+		user.Email = admin.Email
+	} else {
+		dataUser, _ := useCase.userUseCase.FindOneByID(int(oauthRefreshToken.UserID))
+
+		user.ID = dataUser.ID
+		user.Name = dataUser.Name
+		user.Email = dataUser.Email
+	}
+
+	claims := dto.ClaimResponse{
+		ID:      user.ID,
+		Name:    user.Name,
+		Email:   user.Email,
+		IsAdmin: false,
+		RegisteredClaims: jwt.RegisteredClaims{
+			ExpiresAt: jwt.NewNumericDate(expirationTime),
+		},
+	}
+
+	if *oauthRefreshToken.OauthAccessToken.OauthClientID == 2 {
+		claims.IsAdmin = true
+	}
+	jwtKey := []byte(os.Getenv("JWT_SECRET"))
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	tokenString, errSignedString := token.SignedString(jwtKey)
+
+	if errSignedString != nil {
+		return nil, &response.Errors{
+			Code: 500,
+			Err:  errSignedString,
+		}
+	}
+
+	//	insert to oauth access token table
+	dataOauthAccessToken := entity.OauthAccessToken{
+		OauthClientID: oauthRefreshToken.OauthAccessToken.OauthClientID,
+		UserID:        oauthRefreshToken.UserID,
+		Token:         tokenString,
+		Scope:         "*",
+		ExpiredAt:     &expirationTime,
+	}
+
+	saveOauthAccessToken, err := useCase.oauthAccessTokenRepository.Create(dataOauthAccessToken)
+
+	if err != nil {
+		return nil, err
+	}
+
+	expirationTimeOauthRefreshToken := time.Now().Add(24 * 366 * time.Hour)
+
+	//	insert to oauth refresh token table
+	dataOauthRefreshToken := entity.OauthRefreshToken{
+		OauthAccessTokenID: &saveOauthAccessToken.ID,
+		UserID:             oauthRefreshToken.UserID,
+		Token:              utils.RandString(128),
+		ExpiredAt:          &expirationTimeOauthRefreshToken,
+	}
+
+	saveOauthRefreshToken, err := useCase.oauthRefreshTokenRepository.Create(dataOauthRefreshToken)
+
+	if err != nil {
+		return nil, err
+	}
+
+	//	delete old oauth refresh token
+	err = useCase.oauthRefreshTokenRepository.Delete(*oauthRefreshToken)
+	if err != nil {
+		return nil, err
+	}
+
+	//	delete old oauth access token
+	err = useCase.oauthAccessTokenRepository.Delete(*oauthRefreshToken.OauthAccessToken)
+	if err != nil {
+		return nil, err
+	}
+
+	return &dto.LoginResponse{
+		AccessToken:  tokenString,
+		RefreshToken: saveOauthRefreshToken.Token,
+		Type:         "Bearer",
+		ExpiredAt:    expirationTime.Format(time.RFC3339),
+		Scope:        "*",
+	}, nil
 }
 
 func (useCase *oauthUseCase) Login(dtoLoginRequestBody dto.LoginRequest) (*dto.LoginResponse, *response.Errors) {
