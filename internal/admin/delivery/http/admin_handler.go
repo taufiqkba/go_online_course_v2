@@ -93,6 +93,41 @@ func (handler *AdminHandler) Update(ctx *gin.Context) {
 		http.StatusText(http.StatusOK),
 		data,
 	))
+}
+
+func (handler *AdminHandler) FindAll(ctx *gin.Context) {
+	offset, _ := strconv.Atoi(ctx.Query("offset"))
+	limit, _ := strconv.Atoi(ctx.Query("limit"))
+
+	data := handler.useCase.FindAll(offset, limit)
+
+	ctx.JSON(http.StatusOK, response.Response(
+		http.StatusOK,
+		http.StatusText(http.StatusOK),
+		data,
+	))
+}
+
+func (handler *AdminHandler) FindByID(ctx *gin.Context) {
+	id, _ := strconv.Atoi(ctx.Param("id"))
+
+	data, err := handler.useCase.FindByID(id)
+
+	if err != nil {
+		ctx.JSON(int(err.Code), response.Response(
+			int(err.Code),
+			http.StatusText(int(err.Code)),
+			err.Err.Error(),
+		))
+		ctx.Abort()
+		return
+	}
+
+	ctx.JSON(http.StatusOK, response.Response(
+		http.StatusOK,
+		http.StatusText(http.StatusOK),
+		data,
+	))
 
 }
 
