@@ -35,7 +35,7 @@ func (useCase *adminUseCase) Create(dto dto.AdminRequestBody) (*entity.Admin, *r
 
 	dataAdmin := entity.Admin{
 		Name:     dto.Name,
-		Email:    dto.Name,
+		Email:    dto.Email,
 		Password: string(hashedPassword),
 	}
 
@@ -89,16 +89,17 @@ func (useCase *adminUseCase) Update(id int, dto dto.AdminRequestBody) (*entity.A
 		return nil, err
 	}
 	admin.Name = dto.Name
+	admin.Email = dto.Email
 
 	if dto.Password != nil {
-		hashedPassowrd, errHashedPassowrd := bcrypt.GenerateFromPassword([]byte(*dto.Password), bcrypt.DefaultCost)
-		if errHashedPassowrd != nil {
+		hashedPassword, erHashedPassword := bcrypt.GenerateFromPassword([]byte(*dto.Password), bcrypt.DefaultCost)
+		if erHashedPassword != nil {
 			return nil, &response.Errors{
 				Code: 500,
-				Err:  errHashedPassowrd,
+				Err:  erHashedPassword,
 			}
 		}
-		admin.Password = string(hashedPassowrd)
+		admin.Password = string(hashedPassword)
 	}
 
 	updateAdmin, err := useCase.repository.Update(*admin)

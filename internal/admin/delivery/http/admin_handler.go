@@ -22,7 +22,7 @@ func (handler *AdminHandler) Route(r *gin.RouterGroup) {
 	adminRouter.GET("/admin", handler.FindAll)
 	adminRouter.GET("/admin/:id", handler.FindByID)
 	adminRouter.POST("/admin", handler.Create)
-	adminRouter.PATCH("/admin", handler.Update)
+	adminRouter.PATCH("/admin/:id", handler.Update)
 	adminRouter.DELETE("/admin/:id", handler.Delete)
 }
 

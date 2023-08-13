@@ -5,7 +5,7 @@ CREATE table admins (
     password VARCHAR(255) NOT NULL,
     created_by INT NULL,
     updated_by INT NULL,
-    crated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NULL,
     deleted_at TIMESTAMP NULL,
     PRIMARY KEY(id),
