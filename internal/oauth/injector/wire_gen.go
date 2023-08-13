@@ -7,9 +7,11 @@
 package injector
 
 import (
+	repository3 "go_online_course_v2/internal/admin/repository"
+	usecase2 "go_online_course_v2/internal/admin/usecase"
 	"go_online_course_v2/internal/oauth/delivery/http"
 	"go_online_course_v2/internal/oauth/repository"
-	usecase2 "go_online_course_v2/internal/oauth/usecase"
+	usecase3 "go_online_course_v2/internal/oauth/usecase"
 	repository2 "go_online_course_v2/internal/user/repository"
 	"go_online_course_v2/internal/user/usecase"
 	"gorm.io/gorm"
@@ -23,7 +25,9 @@ func InitializedService(db *gorm.DB) *http.OauthHandler {
 	oauthRefreshTokenRepository := repository.NewOauthRefreshTokenRepository(db)
 	userRepository := repository2.NewUserRepository(db)
 	userUseCase := usecase.NewUserUseCase(userRepository)
-	oauthUseCase := usecase2.NewOauthUseCase(oauthClientRepository, oauthAccessTokenRepository, oauthRefreshTokenRepository, userUseCase)
+	adminRepository := repository3.NewAdminRepository(db)
+	adminUseCase := usecase2.NewAdminUseCase(adminRepository)
+	oauthUseCase := usecase3.NewOauthUseCase(oauthClientRepository, oauthAccessTokenRepository, oauthRefreshTokenRepository, userUseCase, adminUseCase)
 	oauthHandler := http.NewOauthHandler(oauthUseCase)
 	return oauthHandler
 }

@@ -3,6 +3,7 @@ package usecase
 import (
 	"errors"
 	"github.com/golang-jwt/jwt/v5"
+	usecase2 "go_online_course_v2/internal/admin/usecase"
 	"go_online_course_v2/internal/oauth/dto"
 	"go_online_course_v2/internal/oauth/entity"
 	"go_online_course_v2/internal/oauth/repository"
@@ -23,6 +24,7 @@ type oauthUseCase struct {
 	oauthAccessTokenRepository  repository.OauthAccessTokenRepository
 	oauthRefreshTokenRepository repository.OauthRefreshTokenRepository
 	userUseCase                 usecase.UserUseCase
+	adminUseCase                usecase2.AdminUseCase
 }
 
 func (useCase *oauthUseCase) Login(dtoLoginRequestBody dto.LoginRequest) (*dto.LoginResponse, *response.Errors) {
@@ -37,20 +39,36 @@ func (useCase *oauthUseCase) Login(dtoLoginRequestBody dto.LoginRequest) (*dto.L
 
 	var user dto.UserResponse
 
-	dataUser, err := useCase.userUseCase.FindByEmail(dtoLoginRequestBody.Email)
-
-	if err != nil {
-		return nil, &response.Errors{
-			Code: 400,
-			Err:  errors.New("username or password is invalid"),
+	//check middleware role
+	if oauthClient.Name == "web-admin" {
+		dataAdmin, err := useCase.adminUseCase.FindByEmail(dtoLoginRequestBody.Email)
+		if err != nil {
+			return nil, &response.Errors{
+				Code: 400,
+				Err:  errors.New("username or password is invalid"),
+			}
 		}
-	}
+		user.ID = dataAdmin.ID
+		user.Email = dataAdmin.Email
+		user.Name = dataAdmin.Name
+		user.Password = dataAdmin.Password
 
-	//set data user for login
-	user.ID = dataUser.ID
-	user.Email = dataUser.Email
-	user.Name = dataUser.Name
-	user.Password = dataUser.Password
+	} else {
+		dataUser, err := useCase.userUseCase.FindByEmail(dtoLoginRequestBody.Email)
+
+		if err != nil {
+			return nil, &response.Errors{
+				Code: 400,
+				Err:  errors.New("username or password is invalid"),
+			}
+		}
+
+		//set data user for login
+		user.ID = dataUser.ID
+		user.Email = dataUser.Email
+		user.Name = dataUser.Name
+		user.Password = dataUser.Password
+	}
 
 	//	define JWT
 	jwtKey := []byte(os.Getenv("JWT_SECRET"))
@@ -77,6 +95,9 @@ func (useCase *oauthUseCase) Login(dtoLoginRequestBody dto.LoginRequest) (*dto.L
 		},
 	}
 
+	if oauthClient.Name == "web-admin" {
+		claims.IsAdmin = true
+	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	tokenString, _ := token.SignedString(jwtKey)
 
@@ -124,11 +145,13 @@ func NewOauthUseCase(
 	oauthAccessTokenRepository repository.OauthAccessTokenRepository,
 	oauthRefreshTokenRepository repository.OauthRefreshTokenRepository,
 	userUseCase usecase.UserUseCase,
+	adminUseCase usecase2.AdminUseCase,
 ) OauthUseCase {
 	return &oauthUseCase{
 		oauthClientRepository:       oauthClientRepository,
 		oauthAccessTokenRepository:  oauthAccessTokenRepository,
 		oauthRefreshTokenRepository: oauthRefreshTokenRepository,
 		userUseCase:                 userUseCase,
+		adminUseCase:                adminUseCase,
 	}
 }
