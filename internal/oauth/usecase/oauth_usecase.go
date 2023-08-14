@@ -106,7 +106,7 @@ func (useCase *oauthUseCase) Refresh(dtoRefreshToken dto.RefreshTokenRequestBody
 	dataOauthRefreshToken := entity.OauthRefreshToken{
 		OauthAccessTokenID: &saveOauthAccessToken.ID,
 		UserID:             oauthRefreshToken.UserID,
-		Token:              utils.RandString(256),
+		Token:              utils.RandString(128),
 		ExpiredAt:          &expirationTimeOauthRefreshToken,
 	}
 
