@@ -29,7 +29,7 @@ func AuthJwt(ctx *gin.Context) {
 
 	//	Split token
 	reqToken := input.Authorization
-	splitToken := strings.Split(reqToken, "Bearer")
+	splitToken := strings.Split(reqToken, "Bearer ")
 
 	if len(splitToken) != 2 {
 		ctx.JSON(http.StatusUnauthorized, response.Response(
