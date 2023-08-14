@@ -47,11 +47,11 @@ func (useCase *oauthUseCase) Refresh(dtoRefreshToken dto.RefreshTokenRequestBody
 	expirationTime := time.Now().Add(24 * 365 * time.Hour)
 
 	if *oauthRefreshToken.OauthAccessToken.OauthClientID == 2 {
-		admin, _ := useCase.adminUseCase.FindByID(int(oauthRefreshToken.UserID))
+		dataAdmin, _ := useCase.adminUseCase.FindByID(int(oauthRefreshToken.UserID))
 
-		user.ID = admin.ID
-		user.Name = admin.Name
-		user.Email = admin.Email
+		user.ID = dataAdmin.ID
+		user.Name = dataAdmin.Name
+		user.Email = dataAdmin.Email
 	} else {
 		dataUser, _ := useCase.userUseCase.FindOneByID(int(oauthRefreshToken.UserID))
 
@@ -60,7 +60,7 @@ func (useCase *oauthUseCase) Refresh(dtoRefreshToken dto.RefreshTokenRequestBody
 		user.Email = dataUser.Email
 	}
 
-	claims := dto.ClaimResponse{
+	claims := &dto.ClaimResponse{
 		ID:      user.ID,
 		Name:    user.Name,
 		Email:   user.Email,
@@ -106,12 +106,11 @@ func (useCase *oauthUseCase) Refresh(dtoRefreshToken dto.RefreshTokenRequestBody
 	dataOauthRefreshToken := entity.OauthRefreshToken{
 		OauthAccessTokenID: &saveOauthAccessToken.ID,
 		UserID:             oauthRefreshToken.UserID,
-		Token:              utils.RandString(128),
+		Token:              utils.RandString(256),
 		ExpiredAt:          &expirationTimeOauthRefreshToken,
 	}
 
 	saveOauthRefreshToken, err := useCase.oauthRefreshTokenRepository.Create(dataOauthRefreshToken)
-
 	if err != nil {
 		return nil, err
 	}

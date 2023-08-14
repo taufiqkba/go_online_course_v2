@@ -50,12 +50,12 @@ func (repository *oauthRefreshTokenRepository) FindOneByToken(token string) (*en
 			Err:  err,
 		}
 	}
-
 	return &oauthRefreshToken, nil
 }
 
 func (repository *oauthRefreshTokenRepository) FindOneByOauthAccessTokenID(oauthAccessTokenID int) (*entity.OauthRefreshToken, *response.Errors) {
 	var oauthRefreshToken entity.OauthRefreshToken
+
 	if err := repository.db.
 		Where("oauth_access_token_id = ?", oauthAccessTokenID).
 		First(&oauthRefreshToken).

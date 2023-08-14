@@ -81,8 +81,8 @@ func (handler *OauthHandler) Refresh(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusCreated, response.Response(
-		http.StatusOK,
-		http.StatusText(http.StatusOK),
+		http.StatusCreated,
+		http.StatusText(http.StatusCreated),
 		data,
 	))
 }
