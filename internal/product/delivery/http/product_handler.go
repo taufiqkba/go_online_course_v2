@@ -69,7 +69,7 @@ func (handler *ProductHandler) Create(ctx *gin.Context) {
 	//	validate input
 	var input dto.ProductRequestBody
 
-	if err := ctx.ShouldBindJSON(&input); err != nil {
+	if err := ctx.ShouldBind(&input); err != nil {
 		ctx.JSON(http.StatusBadRequest, response.Response(
 			http.StatusBadRequest,
 			http.StatusText(http.StatusBadRequest),
@@ -107,7 +107,7 @@ func (handler *ProductHandler) Update(ctx *gin.Context) {
 
 	var input dto.ProductRequestBody
 
-	if err := ctx.ShouldBindJSON(&input); err != nil {
+	if err := ctx.ShouldBind(&input); err != nil {
 		ctx.JSON(http.StatusBadRequest, response.Response(
 			http.StatusBadRequest,
 			http.StatusText(http.StatusBadRequest),
@@ -145,10 +145,18 @@ func (handler *ProductHandler) Delete(ctx *gin.Context) {
 
 	err := handler.useCase.Delete(id)
 	if err != nil {
-		ctx.JSON(http.StatusOK, response.Response(
-			http.StatusOK,
-			http.StatusText(http.StatusOK),
-			"Success",
+		ctx.JSON(int(err.Code), response.Response(
+			int(err.Code),
+			http.StatusText(int(err.Code)),
+			err.Err.Error(),
 		))
+		ctx.Abort()
+		return
 	}
+
+	ctx.JSON(http.StatusOK, response.Response(
+		http.StatusOK,
+		http.StatusText(http.StatusOK),
+		"Success",
+	))
 }
