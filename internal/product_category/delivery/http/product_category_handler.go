@@ -24,11 +24,13 @@ func (handler *ProductCategoryHandler) Route(r *gin.RouterGroup) {
 
 	productCategoryRouter.Use(middleware.AuthJwt, middleware.AuthAdmin)
 	{
-		productCategoryRouter.GET("/product_categories", handler.FindAll)
-		productCategoryRouter.GET("/product_category/:id", handler.FindByID)
-		productCategoryRouter.POST("/product_category", handler.Create)
-		productCategoryRouter.PATCH("/product_category/:id", handler.Update)
-		productCategoryRouter.DELETE("/product_category/:id", handler.Delete)
+		const productCategoryID = "/product_category/:id"
+		const productCategory = "/product_category"
+		productCategoryRouter.GET(productCategory, handler.FindAll)
+		productCategoryRouter.GET(productCategoryID, handler.FindByID)
+		productCategoryRouter.POST(productCategory, handler.Create)
+		productCategoryRouter.PATCH(productCategoryID, handler.Update)
+		productCategoryRouter.DELETE(productCategoryID, handler.Delete)
 	}
 }
 
