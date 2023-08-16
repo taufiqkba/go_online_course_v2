@@ -47,6 +47,7 @@ func (useCase *discountUseCase) Create(dto dto.DiscountRequestBody) (*entity.Dis
 		RemainingQuantity: dto.Quantity,
 		Type:              dto.Type,
 		Value:             dto.Value,
+		CreatedByID:       dto.CreatedBy,
 	}
 
 	if dto.StartDate != nil {
@@ -77,6 +78,7 @@ func (useCase *discountUseCase) Update(id int, dto dto.DiscountRequestBody) (*en
 	discount.RemainingQuantity = dto.Quantity
 	discount.Type = dto.Type
 	discount.Value = dto.Value
+	discount.UpdatedByID = dto.UpdatedBy
 
 	if dto.StartDate != nil {
 		discount.StartDate = dto.StartDate
