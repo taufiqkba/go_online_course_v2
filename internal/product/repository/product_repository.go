@@ -28,14 +28,14 @@ func (repository *productRepository) TotalCountProduct() int64 {
 func (repository *productRepository) FindAll(offset int, limit int) []entity.Product {
 	var products []entity.Product
 
-	repository.db.Scopes(utils.Paginate(offset, limit)).Find(&products)
+	repository.db.Scopes(utils.Paginate(offset, limit)).Preload("ProductCategory").Find(&products)
 	return products
 }
 
 func (repository *productRepository) FindByID(id int) (*entity.Product, *response.Errors) {
 	var product entity.Product
 
-	if err := repository.db.First(product, id).Error; err != nil {
+	if err := repository.db.Preload("ProductCategory").First(&product, id).Error; err != nil {
 		return nil, &response.Errors{
 			Code: 500,
 			Err:  err,
