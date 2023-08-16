@@ -36,3 +36,6 @@ Here are list of libraries being used in this project
 - Setup Mailersend for forgot password verification
 - Implement Admin service
 - Complete OAuth refresh token func
+- Set integration with Cloudinary for CDN
+- Implementation Middleware
+- Product category service
