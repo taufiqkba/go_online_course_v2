@@ -22,11 +22,11 @@ type productCategoryUseCase struct {
 }
 
 func (useCase *productCategoryUseCase) FindAll(offset int, limit int) []entity.ProductCategory {
-	return useCase.FindAll(offset, limit)
+	return useCase.repository.FindAll(offset, limit)
 }
 
 func (useCase *productCategoryUseCase) FindByID(id int) (*entity.ProductCategory, *response.Errors) {
-	return useCase.FindByID(id)
+	return useCase.repository.FindByID(id)
 }
 
 func (useCase *productCategoryUseCase) Create(dto dto.ProductCategoryRequestBody) (*entity.ProductCategory, *response.Errors) {
