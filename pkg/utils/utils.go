@@ -5,6 +5,7 @@ import (
 	"go_online_course_v2/internal/oauth/dto"
 	"gorm.io/gorm"
 	"math/rand"
+	"path/filepath"
 )
 
 func RandString(length int) string {
@@ -53,4 +54,9 @@ func Paginate(offset int, limit int) func(db *gorm.DB) *gorm.DB {
 func GetCurrentUser(ctx *gin.Context) *dto.ClaimResponse {
 	user, _ := ctx.Get("user")
 	return user.(*dto.ClaimResponse)
+}
+
+func GetFileName(fileName string) string {
+	file := filepath.Base(fileName)
+	return file[:len(file)-len(filepath.Ext(file))]
 }
