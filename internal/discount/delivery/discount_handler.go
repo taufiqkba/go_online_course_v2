@@ -28,7 +28,7 @@ func (handler *DiscountHandler) Route(r *gin.RouterGroup) {
 		routerDiscount.GET("/discount/:id", handler.FindByID)
 		routerDiscount.POST("/discount", handler.Create)
 		routerDiscount.PATCH("/discount/:id", handler.Update)
-		routerDiscount.PATCH("/discount/:id", handler.Delete)
+		routerDiscount.DELETE("/discount/:id", handler.Delete)
 	}
 }
 
