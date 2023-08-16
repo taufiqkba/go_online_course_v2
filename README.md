@@ -39,3 +39,7 @@ Here are list of libraries being used in this project
 - Set integration with Cloudinary for CDN
 - Implementation Middleware
 - Product category service
+- Product service
+- Discount service
+- Cart service
+- Integration payment gateway using xendit
