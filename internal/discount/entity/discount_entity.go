@@ -10,8 +10,8 @@ type Discount struct {
 	ID                int64          `json:"id"`
 	Name              string         `json:"name"`
 	Code              string         `json:"code"`
-	Quantity          string         `json:"quantity"`
-	RemainingQuantity string         `json:"remaining_quantity"`
+	Quantity          int64          `json:"quantity"`
+	RemainingQuantity int64          `json:"remaining_quantity"`
 	Type              string         `json:"type "`
 	Value             int64          `json:"value "`
 	StartDate         *time.Time     `json:"start_date"`
