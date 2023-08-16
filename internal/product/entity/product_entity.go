@@ -18,9 +18,9 @@ type Product struct {
 	Description       string                  `json:"description"`
 	IsHighlighted     bool                    `json:"is_highlighted"`
 	Price             int64                   `json:"price"`
-	CreatedByID       *int64                  `json:"created_by" gorm:"created_by"`
+	CreatedByID       *int64                  `json:"created_by" gorm:"column:created_by"`
 	CreatedBy         *entity2.Admin          `json:"-" gorm:"foreignKey:CreatedByID;references:ID"`
-	UpdatedByID       *int64                  `json:"updated_by" gorm:"updated_by"`
+	UpdatedByID       *int64                  `json:"updated_by" gorm:"column:updated_by"`
 	UpdatedBy         *entity2.Admin          `json:"-" gorm:"foreignKey:UpdatedByID;references:ID"`
 	CreatedAt         *time.Time              `json:"created_at"`
 	UpdatedAt         *time.Time              `json:"updated_at"`
