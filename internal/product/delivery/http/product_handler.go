@@ -2,6 +2,7 @@ package http
 
 import (
 	"github.com/gin-gonic/gin"
+	"go_online_course_v2/internal/middleware"
 	"go_online_course_v2/internal/product/dto"
 	"go_online_course_v2/internal/product/usecase"
 	"go_online_course_v2/pkg/response"
@@ -19,7 +20,16 @@ func NewProductHandler(useCase usecase.ProductUseCase) *ProductHandler {
 }
 
 func (handler *ProductHandler) Route(r *gin.RouterGroup) {
+	productRoute := r.Group("/api/v1")
 
+	productRoute.GET("/product", handler.FindAll)
+	productRoute.GET("/product/:id", handler.FindByID)
+	productRoute.Use(middleware.AuthJwt, middleware.AuthAdmin)
+	{
+		productRoute.POST("/product", handler.Create)
+		productRoute.PATCH("/product/:id", handler.Update)
+		productRoute.DELETE("/product/:id", handler.Delete)
+	}
 }
 
 func (handler *ProductHandler) FindAll(ctx *gin.Context) {
@@ -69,6 +79,7 @@ func (handler *ProductHandler) Create(ctx *gin.Context) {
 		return
 	}
 
+	//set createdBy
 	admin := utils.GetCurrentUser(ctx)
 	input.CreatedBy = &admin.ID
 
@@ -105,6 +116,10 @@ func (handler *ProductHandler) Update(ctx *gin.Context) {
 		ctx.Abort()
 		return
 	}
+
+	//set updatedBy
+	admin := utils.GetCurrentUser(ctx)
+	input.UpdatedBy = &admin.ID
 
 	data, err := handler.useCase.Update(id, input)
 	if err != nil {
