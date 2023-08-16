@@ -48,7 +48,7 @@ func (repository *productCategoryRepository) Create(entity entity.ProductCategor
 }
 
 func (repository *productCategoryRepository) Update(entity entity.ProductCategory) (*entity.ProductCategory, *response.Errors) {
-	if err := repository.db.Save(&entity); err != nil {
+	if err := repository.db.Save(&entity).Error; err != nil {
 		return nil, &response.Errors{
 			Code: 500,
 			Err:  nil,
