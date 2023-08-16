@@ -157,6 +157,6 @@ func (handler *ProductCategoryHandler) Delete(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, response.Response(
 		http.StatusOK,
 		http.StatusText(http.StatusOK),
-		nil,
+		"Success",
 	))
 }
