@@ -30,7 +30,6 @@ func (handler *ProductCategoryHandler) Route(r *gin.RouterGroup) {
 		productCategoryRouter.PATCH("/product_category/:id", handler.Update)
 		productCategoryRouter.DELETE("/product_category/:id", handler.Delete)
 	}
-
 }
 
 func (handler *ProductCategoryHandler) FindAll(ctx *gin.Context) {
@@ -70,7 +69,7 @@ func (handler *ProductCategoryHandler) Create(ctx *gin.Context) {
 	//	validate input
 	var input dto.ProductCategoryRequestBody
 
-	if err := ctx.ShouldBindJSON(&input); err != nil {
+	if err := ctx.ShouldBind(&input); err != nil {
 		ctx.JSON(http.StatusBadRequest, response.Response(
 			http.StatusBadRequest,
 			http.StatusText(http.StatusBadRequest),
@@ -107,7 +106,7 @@ func (handler *ProductCategoryHandler) Update(ctx *gin.Context) {
 
 	var input dto.ProductCategoryRequestBody
 
-	if err := ctx.ShouldBindJSON(&input); err != nil {
+	if err := ctx.ShouldBind(&input); err != nil {
 		ctx.JSON(http.StatusBadRequest, response.Response(
 			http.StatusBadRequest,
 			http.StatusText(http.StatusBadRequest),
