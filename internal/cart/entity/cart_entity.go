@@ -4,6 +4,7 @@ import (
 	entity3 "go_online_course_v2/internal/admin/entity"
 	entity2 "go_online_course_v2/internal/product/entity"
 	"go_online_course_v2/internal/user/entity"
+	"gorm.io/gorm"
 	"time"
 )
 
@@ -21,5 +22,5 @@ type Cart struct {
 	UpdatedBy   *entity3.Admin   `json:"-" gorm:"foreignKey:UpdatedByID;references:ID"`
 	CreatedAt   *time.Time       `json:"created_at"`
 	UpdatedAt   *time.Time       `json:"updated_at"`
-	DeletedAt   *time.Time       `json:"deleted_at"`
+	DeletedAt   gorm.DeletedAt   `json:"deleted_at"`
 }

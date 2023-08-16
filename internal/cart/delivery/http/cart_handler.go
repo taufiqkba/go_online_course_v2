@@ -117,7 +117,7 @@ func (handler *CartHandler) Update(ctx *gin.Context) {
 }
 
 func (handler *CartHandler) Delete(ctx *gin.Context) {
-	id, _ := strconv.Atoi("id")
+	id, _ := strconv.Atoi(ctx.Param("id"))
 	user := utils.GetCurrentUser(ctx)
 
 	err := handler.useCase.Delete(id, int(user.ID))
