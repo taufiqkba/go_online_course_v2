@@ -2,6 +2,7 @@ package http
 
 import (
 	"github.com/gin-gonic/gin"
+	"go_online_course_v2/internal/middleware"
 	"go_online_course_v2/internal/order/dto"
 	"go_online_course_v2/internal/order/usecase"
 	"go_online_course_v2/pkg/response"
@@ -19,7 +20,14 @@ func NewOrderHandler(useCase usecase.OrderUseCase) *OrderHandler {
 }
 
 func (handler *OrderHandler) Route(r *gin.RouterGroup) {
+	orderRoute := r.Group("/api/v1")
 
+	orderRoute.Use(middleware.AuthJwt)
+	{
+		orderRoute.POST("/orders", handler.Create)
+		orderRoute.GET("/orders", handler.FindAllByUserID)
+		orderRoute.GET("/orders/:id", handler.FindByID)
+	}
 }
 
 func (handler *OrderHandler) FindAllByUserID(ctx *gin.Context) {
