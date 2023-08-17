@@ -48,7 +48,9 @@ func (repository *orderRepository) FindOneByExternalID(externalID string) (*enti
 func (repository *orderRepository) FindOneByID(id int) (*entity.Order, *response.Errors) {
 	var order entity.Order
 
-	if err := repository.db.Preload("OrderDetails.Product").First(&order, id).Error; err != nil {
+	if err := repository.db.
+		Preload("OrderDetails.Product").
+		First(&order, id).Error; err != nil {
 		return nil, &response.Errors{
 			Code: 500,
 			Err:  err,

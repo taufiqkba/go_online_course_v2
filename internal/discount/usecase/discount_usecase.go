@@ -14,16 +14,32 @@ type DiscountUseCase interface {
 	Create(dto dto.DiscountRequestBody) (*entity.Discount, *response.Errors)
 	Update(id int, dto dto.DiscountRequestBody) (*entity.Discount, *response.Errors)
 	Delete(id int) *response.Errors
-	UpdateRemainingQuantity(id int, quantity int, operator string)
+	UpdateRemainingQuantity(id int, quantity int, operator string) (*entity.Discount, *response.Errors)
 }
 
 type discountUseCase struct {
 	repository repository.DiscountRepository
 }
 
-func (useCase *discountUseCase) UpdateRemainingQuantity(id int, quantity int, operator string) {
-	//TODO implement me
-	panic("implement me")
+func (useCase *discountUseCase) UpdateRemainingQuantity(id int, quantity int, operator string) (*entity.Discount, *response.Errors) {
+	discount, err := useCase.repository.FindByID(id)
+	if err != nil {
+		return nil, err
+	}
+
+	if operator == "+" {
+		discount.RemainingQuantity = discount.RemainingQuantity + int64(quantity)
+	} else if operator == "-" {
+		discount.RemainingQuantity = discount.RemainingQuantity - int64(quantity)
+	}
+
+	updateDiscount, err := useCase.repository.Update(*discount)
+	if err != nil {
+		return nil, err
+	}
+
+	return updateDiscount, nil
+
 }
 
 func (useCase *discountUseCase) FindAll(offset int, limit int) []entity.Discount {
