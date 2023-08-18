@@ -39,7 +39,7 @@ type orderUseCase struct {
 }
 
 func (useCase *orderUseCase) FindAllByUserID(userID int, offset int, limit int) []entity2.Order {
-	return useCase.FindAllByUserID(userID, offset, limit)
+	return useCase.repository.FindAllByUserID(userID, offset, limit)
 }
 
 func (useCase *orderUseCase) FindOneByID(id int) (*entity2.Order, *response.Errors) {
@@ -115,6 +115,8 @@ func (useCase *orderUseCase) Create(dto dto.OrderRequestBody) (*entity2.Order, *
 				}
 			}
 		}
+		//assign discount
+		dataDiscount = discount
 	}
 
 	//	check carts
@@ -140,7 +142,7 @@ func (useCase *orderUseCase) Create(dto dto.OrderRequestBody) (*entity2.Order, *
 		price += int(product.Price)
 
 		i := strconv.Itoa(index + 1)
-		description = i + ". Product : " + product.Title + "<br/>"
+		description += i + ". Product : " + product.Title + "<br/>"
 	}
 	totalPrice = price
 
@@ -195,7 +197,7 @@ func (useCase *orderUseCase) Create(dto dto.OrderRequestBody) (*entity2.Order, *
 
 	//	update remainingQuantity
 	if dto.DiscountCode != nil {
-		_, err := useCase.discountUseCase.UpdateRemainingQuantity(int(*data.DiscountID), 1, "-")
+		_, err := useCase.discountUseCase.UpdateRemainingQuantity(int(dataDiscount.ID), 1, "-")
 		if err != nil {
 			return nil, err
 		}

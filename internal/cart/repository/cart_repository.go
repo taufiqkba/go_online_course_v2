@@ -75,7 +75,7 @@ func (repository *cartRepository) Delete(entity entity.Cart) *response.Errors {
 func (repository *cartRepository) DeleteByUserID(id int) *response.Errors {
 	var cart entity.Cart
 
-	if err := repository.db.Where("user_id = ?").Delete(&cart).Error; err != nil {
+	if err := repository.db.Where("user_id = ?", id).Delete(&cart).Error; err != nil {
 		return &response.Errors{
 			Code: 500,
 			Err:  err,
