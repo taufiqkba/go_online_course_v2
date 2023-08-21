@@ -16,6 +16,12 @@ func NewWebHookHandler(useCase usecase.WebHookUseCase) *WebHookHandler {
 	return &WebHookHandler{useCase: useCase}
 }
 
+func (handler *WebHookHandler) Route(r *gin.RouterGroup) {
+	webHookRoute := r.Group("/api/v1")
+
+	webHookRoute.POST("/webhook/xendit", handler.Xendit)
+}
+
 func (handler *WebHookHandler) Xendit(ctx *gin.Context) {
 	var input dto.WebHookRequestBody
 
