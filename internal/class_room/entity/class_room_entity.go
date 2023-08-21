@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-type Entity struct {
+type ClassRoom struct {
 	ID          int64            `json:"id"`
 	UserID      int64            `json:"user_id"`
 	User        *entity.User     `json:"user" gorm:"foreignKey:UserID;references:ID"`
