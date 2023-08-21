@@ -14,8 +14,8 @@ type ClassRoomHandler struct {
 	useCase usecase.ClassRoomUseCase
 }
 
-func NewClassRoomHandler() *ClassRoomHandler {
-	return &ClassRoomHandler{}
+func NewClassRoomHandler(useCase usecase.ClassRoomUseCase) *ClassRoomHandler {
+	return &ClassRoomHandler{useCase: useCase}
 }
 
 func (handler *ClassRoomHandler) Route(r *gin.RouterGroup) {
