@@ -8,7 +8,7 @@ import (
 )
 
 type ClassRoomRepository interface {
-	FindAllByUserID(userID int64, offset int, limit int) []entity.ClassRoom
+	FindAllByUserID(userID int, offset int, limit int) []entity.ClassRoom
 	FindOneByUserIDAndProductID(userID int, productID int) (*entity.ClassRoom, *response.Errors)
 	Create(entity entity.ClassRoom) (*entity.ClassRoom, *response.Errors)
 }
@@ -17,7 +17,7 @@ type classRoomRepository struct {
 	db *gorm.DB
 }
 
-func (repository *classRoomRepository) FindAllByUserID(userID int64, offset int, limit int) []entity.ClassRoom {
+func (repository *classRoomRepository) FindAllByUserID(userID int, offset int, limit int) []entity.ClassRoom {
 	var classRooms []entity.ClassRoom
 
 	repository.db.Scopes(utils.Paginate(offset, limit)).
