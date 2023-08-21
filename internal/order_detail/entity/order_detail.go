@@ -10,7 +10,7 @@ import (
 type OrderDetail struct {
 	ID          int64           `json:"id"`
 	OrderID     int64           `json:"order_id"`
-	ProductID   int64           `json:"product_id"`
+	ProductID   *int64          `json:"product_id"`
 	Product     *entity.Product `json:"product" gorm:"foreignKey:ProductID;references:ID"`
 	Price       int64           `json:"price"`
 	CreatedByID *int64          `json:"created_by" gorm:"column:created_by"`
