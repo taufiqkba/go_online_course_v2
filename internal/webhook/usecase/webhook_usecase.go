@@ -66,7 +66,7 @@ func (useCase *webHookUseCase) UpdatePayment(id string) *response.Errors {
 			//	add data to classrooms
 			for _, orderDetail := range dataOrder.OrderDetails {
 				dataClassRoom := dto.ClassRoomRequestBody{
-					UserID:    dataOrder.ID,
+					UserID:    *dataOrder.UserID,
 					ProductID: *orderDetail.ProductID,
 				}
 				_, err := useCase.classRoomUseCase.Create(dataClassRoom)
