@@ -35,7 +35,7 @@ func (useCase *webHookUseCase) UpdatePayment(id string) *response.Errors {
 		}
 	}
 
-	if dataXendit != nil {
+	if dataXendit == nil {
 		return &response.Errors{
 			Code: 404,
 			Err:  errors.New("order not found"),
