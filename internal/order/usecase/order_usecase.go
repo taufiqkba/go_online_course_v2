@@ -174,7 +174,7 @@ func (useCase *orderUseCase) Create(dto dto.OrderRequestBody) (*entity2.Order, *
 	for _, product := range products {
 		orderDetail := entity4.OrderDetail{
 			OrderID:     data.ID,
-			ProductID:   product.ID,
+			ProductID:   &product.ID,
 			Price:       product.Price,
 			CreatedByID: order.UserID,
 		}

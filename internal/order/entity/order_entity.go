@@ -25,6 +25,6 @@ type Order struct {
 	UpdatedByID  *int64                `json:"updated_by" gorm:"column:updated_by"`
 	UpdatedBy    *entity.User          `json:"-" gorm:"foreignKey:UpdatedByID;references:ID"`
 	CreatedAt    *time.Time            `json:"created_at"`
-	UpdatedAT    *time.Time            `json:"updated_at"`
+	UpdatedAt    *time.Time            `json:"updated_at"`
 	DeletedAt    gorm.DeletedAt        `json:"deleted_at"`
 }
