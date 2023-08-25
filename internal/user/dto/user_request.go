@@ -10,8 +10,8 @@ type UserRequestBody struct {
 }
 
 type UserUpdateRequestBody struct {
-	Name            string     `json:"name"`
-	Email           string     `json:"email"`
+	Name            *string    `json:"name"`
+	Email           *string    `json:"email"`
 	EmailVerifiedAt *time.Time `json:"email_verified_at"`
 	Password        *string    `json:"password"`
 	UpdatedBy       *int64     `json:"updated_by"`

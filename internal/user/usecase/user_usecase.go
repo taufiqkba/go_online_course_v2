@@ -27,8 +27,7 @@ type userUseCase struct {
 }
 
 func (useCase *userUseCase) FindAll(offset int, limit int) []entity.User {
-	//TODO implement me
-	panic("implement me")
+	return useCase.repository.FindAll(offset, limit)
 }
 
 // FindByEmail implements UserUseCase
@@ -70,6 +69,10 @@ func (useCase *userUseCase) Create(dto dto.UserRequestBody) (*entity.User, *resp
 		CodeVerified: utils.RandNumber(12),
 	}
 
+	if dto.CreatedBy != nil {
+		user.CreatedByID = dto.CreatedBy
+	}
+
 	dataUser, err := useCase.repository.Create(user)
 	if err != nil {
 		return nil, &response.Errors{
@@ -81,8 +84,7 @@ func (useCase *userUseCase) Create(dto dto.UserRequestBody) (*entity.User, *resp
 }
 
 func (useCase *userUseCase) FindOneByCodeVerified(codeVerified string) (*entity.User, *response.Errors) {
-	//TODO implement me
-	panic("implement me")
+	return useCase.repository.FindOneByCodeVerified(codeVerified)
 }
 
 func (useCase *userUseCase) Update(id int, dto dto.UserUpdateRequestBody) (*entity.User, *response.Errors) {
@@ -91,6 +93,16 @@ func (useCase *userUseCase) Update(id int, dto dto.UserUpdateRequestBody) (*enti
 
 	if err != nil {
 		return nil, err
+	}
+
+	if dto.Email != nil {
+		if user.Email != *dto.Email {
+			user.Email = *dto.Email
+		}
+	}
+
+	if dto.Name != nil {
+		user.Name = *dto.Name
 	}
 
 	//	check
@@ -105,6 +117,10 @@ func (useCase *userUseCase) Update(id int, dto dto.UserUpdateRequestBody) (*enti
 		user.Password = string(hashedPassword)
 	}
 
+	if dto.UpdatedBy != nil {
+		user.UpdatedByID = dto.UpdatedBy
+	}
+
 	updateUser, err := useCase.repository.Update(*user)
 	if err != nil {
 		return nil, err
@@ -114,8 +130,15 @@ func (useCase *userUseCase) Update(id int, dto dto.UserUpdateRequestBody) (*enti
 }
 
 func (useCase *userUseCase) Delete(id int) *response.Errors {
-	//TODO implement me
-	panic("implement me")
+	user, err := useCase.repository.FindOneByID(id)
+	if err != nil {
+		return err
+	}
+	err = useCase.repository.Delete(*user)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func (useCase *userUseCase) TotalCountUser() int64 {
