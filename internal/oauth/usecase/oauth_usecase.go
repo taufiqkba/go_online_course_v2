@@ -110,6 +110,8 @@ func (useCase *oauthUseCase) Refresh(dtoRefreshToken dto.RefreshTokenRequestBody
 		ExpiredAt:          &expirationTimeOauthRefreshToken,
 	}
 
+	//TODO check to make sure access & refresh token is unique
+
 	saveOauthRefreshToken, err := useCase.oauthRefreshTokenRepository.Create(dataOauthRefreshToken)
 	if err != nil {
 		return nil, err
