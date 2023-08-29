@@ -6,14 +6,19 @@ import (
 	"gorm.io/gorm"
 	"math/rand"
 	"path/filepath"
+	"time"
 )
 
 func RandString(length int) string {
-	var letterRune = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890")
+	const charset = "abcdefghijklmnopqrstuvwxyz" +
+		"ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 
-	b := make([]rune, length)
+	var seededRand *rand.Rand = rand.New(
+		rand.NewSource(time.Now().UnixNano()))
+
+	b := make([]byte, length)
 	for i := range b {
-		b[i] = letterRune[rand.Intn(len(letterRune))]
+		b[i] = charset[seededRand.Intn(len(charset))]
 	}
 	return string(b)
 }
