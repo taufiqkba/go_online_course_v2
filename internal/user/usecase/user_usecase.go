@@ -142,8 +142,7 @@ func (useCase *userUseCase) Delete(id int) *response.Errors {
 }
 
 func (useCase *userUseCase) TotalCountUser() int64 {
-	//TODO implement me
-	panic("implement me")
+	return useCase.repository.TotalCountUser()
 }
 
 func NewUserUseCase(repository repository.UserRepository) UserUseCase {

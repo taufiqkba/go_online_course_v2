@@ -80,7 +80,11 @@ func (repository *adminRepository) FindByID(id int) (*entity.Admin, *response.Er
 
 // TotalCountAdmin implements AdminRepository.
 func (repository *adminRepository) TotalCountAdmin() int64 {
-	panic("unimplemented")
+	var admin entity.Admin
+	var totalAdmin int64
+
+	repository.db.Model(&admin).Count(&totalAdmin)
+	return totalAdmin
 }
 
 // Update implements AdminRepository.

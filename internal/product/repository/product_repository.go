@@ -21,8 +21,11 @@ type productRepository struct {
 }
 
 func (repository *productRepository) TotalCountProduct() int64 {
-	//implement me
-	panic("implement me")
+	var product entity.Product
+	var totalProduct int64
+
+	repository.db.Model(&product).Count(&totalProduct)
+	return totalProduct
 }
 
 func (repository *productRepository) FindAll(offset int, limit int) []entity.Product {

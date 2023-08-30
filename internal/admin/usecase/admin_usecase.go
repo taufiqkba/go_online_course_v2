@@ -82,7 +82,7 @@ func (useCase *adminUseCase) FindByID(id int) (*entity.Admin, *response.Errors) 
 
 // TotalCountAdmin implements AdminUseCase.
 func (useCase *adminUseCase) TotalCountAdmin() int64 {
-	panic("unimplemented")
+	return useCase.repository.TotalCountAdmin()
 }
 
 // Update implements AdminUseCase.

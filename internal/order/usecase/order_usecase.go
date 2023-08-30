@@ -228,8 +228,7 @@ func (useCase *orderUseCase) Update(id int, dto dto.OrderRequestBody) (*entity2.
 }
 
 func (useCase *orderUseCase) TotalCountOrder() int64 {
-	//TODO implement me
-	panic("implement me")
+	return useCase.repository.TotalCountOrder()
 }
 
 func NewOrderUseCase(

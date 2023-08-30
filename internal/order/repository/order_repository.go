@@ -80,8 +80,11 @@ func (repository *orderRepository) Update(entity entity.Order) (*entity.Order, *
 }
 
 func (repository *orderRepository) TotalCountOrder() int64 {
-	//TODO implement me
-	panic("implement me")
+	var order entity.Order
+	var totalOrder int64
+
+	repository.db.Model(&order).Count(&totalOrder)
+	return totalOrder
 }
 
 func NewOrderRepository(db *gorm.DB) OrderRepository {

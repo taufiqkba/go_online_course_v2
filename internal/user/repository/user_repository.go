@@ -97,8 +97,11 @@ func (repository *userRepository) Delete(entity entity.User) *response.Errors {
 }
 
 func (repository *userRepository) TotalCountUser() int64 {
-	//TODO implement me
-	panic("implement me")
+	var user entity.User
+	var totalUser int64
+
+	repository.db.Model(&user).Count(&totalUser)
+	return totalUser
 }
 
 func NewUserRepository(db *gorm.DB) UserRepository {

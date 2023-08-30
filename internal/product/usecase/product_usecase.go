@@ -25,8 +25,7 @@ type productUseCase struct {
 }
 
 func (useCase *productUseCase) TotalCountProduct() int64 {
-	//TODO implement me
-	panic("implement me")
+	return useCase.repository.TotalCountProduct()
 }
 
 func (useCase *productUseCase) FindAll(offset int, limit int) []entity.Product {
