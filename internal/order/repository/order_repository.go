@@ -14,6 +14,7 @@ type OrderRepository interface {
 	Create(entity entity.Order) (*entity.Order, *response.Errors)
 	Update(entity entity.Order) (*entity.Order, *response.Errors)
 	TotalCountOrder() int64
+	TotalGross() int64
 }
 
 type orderRepository struct {
@@ -85,6 +86,16 @@ func (repository *orderRepository) TotalCountOrder() int64 {
 
 	repository.db.Model(&order).Count(&totalOrder)
 	return totalOrder
+}
+
+func (repository *orderRepository) TotalGross() int64 {
+	var totalGross int64
+
+	err := repository.db.Table("orders").Select("sum(total_price)").Row().Scan(&totalGross)
+	if err != nil {
+		return 0
+	}
+	return totalGross
 }
 
 func NewOrderRepository(db *gorm.DB) OrderRepository {

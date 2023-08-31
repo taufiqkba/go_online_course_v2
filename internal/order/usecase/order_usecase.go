@@ -27,6 +27,7 @@ type OrderUseCase interface {
 	Create(dto dto.OrderRequestBody) (*entity2.Order, *response.Errors)
 	Update(id int, dto dto.OrderRequestBody) (*entity2.Order, *response.Errors)
 	TotalCountOrder() int64
+	TotalGross() int64
 }
 
 type orderUseCase struct {
@@ -229,6 +230,10 @@ func (useCase *orderUseCase) Update(id int, dto dto.OrderRequestBody) (*entity2.
 
 func (useCase *orderUseCase) TotalCountOrder() int64 {
 	return useCase.repository.TotalCountOrder()
+}
+
+func (useCase *orderUseCase) TotalGross() int64 {
+	return useCase.repository.TotalGross()
 }
 
 func NewOrderUseCase(

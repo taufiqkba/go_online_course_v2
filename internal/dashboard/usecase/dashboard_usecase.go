@@ -26,6 +26,7 @@ func (useCase *dashboardUseCase) GetDashboard() dto.DashboardResponseBody {
 	dataDashboard.TotalOrder = useCase.orderUseCase.TotalCountOrder()
 	dataDashboard.TotalUser = useCase.userUseCase.TotalCountUser()
 	dataDashboard.TotalProduct = useCase.productUseCase.TotalCountProduct()
+	dataDashboard.TotalGross = useCase.orderUseCase.TotalGross()
 
 	return dataDashboard
 }

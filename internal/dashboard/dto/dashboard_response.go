@@ -5,4 +5,5 @@ type DashboardResponseBody struct {
 	TotalProduct int64 `json:"total_product"`
 	TotalOrder   int64 `json:"total_order"`
 	TotalAdmin   int64 `json:"total_admin"`
+	TotalGross   int64 `json:"total_gross"`
 }
