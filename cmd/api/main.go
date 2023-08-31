@@ -5,6 +5,7 @@ import (
 	injector4 "go_online_course_v2/internal/admin/injector"
 	injector8 "go_online_course_v2/internal/cart/injector"
 	injector10 "go_online_course_v2/internal/class_room/injector"
+	injector13 "go_online_course_v2/internal/dashboard/injector"
 	injector7 "go_online_course_v2/internal/discount/injector"
 	injector3 "go_online_course_v2/internal/forgot_password/injector"
 	injector2 "go_online_course_v2/internal/oauth/injector"
@@ -33,6 +34,7 @@ func main() {
 	injector10.InitializedService(db).Route(&r.RouterGroup)
 	injector11.InitializedService(db).Route(&r.RouterGroup)
 	injector12.InitializedService(db).Route(&r.RouterGroup)
+	injector13.InitializedService(db).Route(&r.RouterGroup)
 	err := r.Run()
 	if err != nil {
 		return

@@ -30,6 +30,16 @@ func (useCase *dashboardUseCase) GetDashboard() dto.DashboardResponseBody {
 	return dataDashboard
 }
 
-func NewDashboardUseCase(adminUseCase usecase.AdminUseCase) DashboardUseCase {
-	return &dashboardUseCase{adminUseCase: adminUseCase}
+func NewDashboardUseCase(
+	adminUseCase usecase.AdminUseCase,
+	orderUseCase usecase2.OrderUseCase,
+	productUseCase usecase3.ProductUseCase,
+	userUseCase usecase4.UserUseCase,
+) DashboardUseCase {
+	return &dashboardUseCase{
+		adminUseCase:   adminUseCase,
+		orderUseCase:   orderUseCase,
+		productUseCase: productUseCase,
+		userUseCase:    userUseCase,
+	}
 }
