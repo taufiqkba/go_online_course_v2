@@ -18,6 +18,7 @@ import (
 type OauthUseCase interface {
 	Login(dtoLoginRequestBody dto.LoginRequest) (*dto.LoginResponse, *response.Errors)
 	Refresh(dtoRefreshToken dto.RefreshTokenRequestBody) (*dto.LoginResponse, *response.Errors)
+	Logout(accessToken string) *response.Errors
 }
 
 type oauthUseCase struct {
@@ -26,6 +27,25 @@ type oauthUseCase struct {
 	oauthRefreshTokenRepository repository.OauthRefreshTokenRepository
 	userUseCase                 usecase.UserUseCase
 	adminUseCase                usecase2.AdminUseCase
+}
+
+func (useCase *oauthUseCase) Logout(accessToken string) *response.Errors {
+	//	find by accessToken on oauth_access_token table
+	oauthAccessToken, err := useCase.oauthAccessTokenRepository.FindOneByAccessToken(accessToken)
+	if err != nil {
+		return err
+	}
+
+	//	find by oauth_refresh_token_id
+	oauthRefreshToken, err := useCase.oauthRefreshTokenRepository.FindOneByOauthAccessTokenID(int(oauthAccessToken.ID))
+	if err != nil {
+		return err
+	}
+
+	//	delete data
+	useCase.oauthRefreshTokenRepository.Delete(*oauthRefreshToken)
+	useCase.oauthAccessTokenRepository.Delete(*oauthAccessToken)
+	return nil
 }
 
 func (useCase *oauthUseCase) Refresh(dtoRefreshToken dto.RefreshTokenRequestBody) (*dto.LoginResponse, *response.Errors) {
