@@ -121,6 +121,10 @@ func (useCase *userUseCase) Update(id int, dto dto.UserUpdateRequestBody) (*enti
 		user.UpdatedByID = dto.UpdatedBy
 	}
 
+	if dto.EmailVerifiedAt != nil {
+		user.EmailVerifiedAt = dto.EmailVerifiedAt
+	}
+
 	updateUser, err := useCase.repository.Update(*user)
 	if err != nil {
 		return nil, err
