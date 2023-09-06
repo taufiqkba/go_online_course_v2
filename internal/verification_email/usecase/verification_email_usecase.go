@@ -1,9 +1,9 @@
 package usecase
 
 import (
-	"go_online_course_v2/internal/email_verification/dto"
 	dto2 "go_online_course_v2/internal/user/dto"
 	"go_online_course_v2/internal/user/usecase"
+	"go_online_course_v2/internal/verification_email/dto"
 	"go_online_course_v2/pkg/response"
 	"time"
 )
