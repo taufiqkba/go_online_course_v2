@@ -1,7 +1,6 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
 	injector4 "go_online_course_v2/internal/admin/injector"
 	injector8 "go_online_course_v2/internal/cart/injector"
 	injector10 "go_online_course_v2/internal/class_room/injector"
@@ -15,8 +14,11 @@ import (
 	injector14 "go_online_course_v2/internal/profile/injector"
 	"go_online_course_v2/internal/register/injector"
 	injector12 "go_online_course_v2/internal/user/injector"
+	injector15 "go_online_course_v2/internal/verification_email/injector"
 	injector11 "go_online_course_v2/internal/webhook/injector"
 	"go_online_course_v2/pkg/db/mysql"
+
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
@@ -37,6 +39,7 @@ func main() {
 	injector12.InitializedService(db).Route(&r.RouterGroup)
 	injector13.InitializedService(db).Route(&r.RouterGroup)
 	injector14.InitializedService(db).Route(&r.RouterGroup)
+	injector15.InitializedService(db).Route(&r.RouterGroup)
 	err := r.Run()
 	if err != nil {
 		return

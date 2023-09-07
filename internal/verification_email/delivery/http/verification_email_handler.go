@@ -1,11 +1,12 @@
 package http
 
 import (
-	"github.com/gin-gonic/gin"
 	"go_online_course_v2/internal/verification_email/dto"
 	"go_online_course_v2/internal/verification_email/usecase"
 	"go_online_course_v2/pkg/response"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 type VerificationEmailHandler struct {
@@ -19,7 +20,7 @@ func NewVerificationEmailHandler(usecase usecase.VerificationEmailUseCase) *Veri
 func (handler *VerificationEmailHandler) Route(r *gin.RouterGroup) {
 	verificationEmailRouter := r.Group("/api/v1")
 
-	verificationEmailRouter.POST("/verification_emails", handler.VerificationEmail)
+	verificationEmailRouter.POST("/verification_email", handler.VerificationEmail)
 }
 
 func (handler *VerificationEmailHandler) VerificationEmail(ctx *gin.Context) {
